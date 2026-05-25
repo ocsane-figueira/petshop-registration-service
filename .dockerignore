@@ -1,5 +1,7 @@
 target/
+build/
 .idea/
 .vscode/
-.git/
 *.iml
+.git/
+.github/
