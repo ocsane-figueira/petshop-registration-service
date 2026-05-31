@@ -74,6 +74,34 @@ O serviço expõe telemetria rica em tempo real para monitoramento corporativo:
 
 ---
 
+## 📖 Documentação da API (Swagger / OpenAPI)
+
+O microsserviço está configurado com suporte nativo ao **Swagger UI** e geração de especificação **OpenAPI** via extensão `quarkus-smallrye-openapi`.
+
+### 🌐 Endpoints de Acesso em Desenvolvimento (DEV)
+
+Em ambiente de desenvolvimento (local ou na nuvem), você pode acessar a documentação diretamente no microsserviço (completamente independente do API Gateway):
+
+* **Swagger UI (Interface Visual)**: `http://localhost:8081/q/swagger-ui/`
+  * No Render (DEV): [https://petshop-registration-service-dev.onrender.com/q/swagger-ui/](https://petshop-registration-service-dev.onrender.com/q/swagger-ui/)
+* **OpenAPI Spec (Esquema JSON)**: `http://localhost:8081/q/openapi`
+  * No Render (DEV): [https://petshop-registration-service-dev.onrender.com/q/openapi](https://petshop-registration-service-dev.onrender.com/q/openapi)
+
+### 🔒 Controle de Ambientes e Segurança
+
+Para alinhar segurança e performance em produção/homologação, a exibição da documentação segue esta estratégia:
+
+1. **Inclusão na Compilação (`Build Time`)**:
+   A propriedade `quarkus.swagger-ui.always-include=true` está configurada no arquivo principal `application.properties`. Isso garante que o Quarkus compile e empacote os arquivos estáticos do Swagger no JAR de produção gerado no Dockerfile.
+2. **Bloqueio em Homologação/Produção (`Runtime`)**:
+   Para evitar a exposição pública indesejada de ferramentas de teste, o Swagger é desativado em tempo de execução no perfil de homologação através da propriedade:
+   ```properties
+   quarkus.swagger-ui.enable=false
+   ```
+   Qualquer tentativa de acesso fora do ambiente DEV retornará erro `404 Not Found`.
+
+---
+
 ## 🚀 Pipeline de CI/CD (GitHub Actions)
 
 Este repositório possui fluxos totalmente automatizados integrando as melhores práticas DevOps:
