@@ -1,0 +1,31 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches:
+      - develop
+      - main
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Identificar Branch e Ambiente
+        run: echo "O deploy vai ser feito com base no sucesso da branch ${{ github.event.workflow_run.head_branch }}"
+
+      - name: Deploy para DEV (Branch develop)
+        if: ${{ github.event.workflow_run.head_branch == 'develop' }}
+        run: |
+          echo "A chamar o webhook do Render para o ambiente DEV..."
+          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_DEV }}"
+
+      - name: Deploy para HOMOL/PROD (Branch main)
+        if: ${{ github.event.workflow_run.head_branch == 'main' }}
+        run: |
+          echo "A chamar o webhook do Render para o ambiente HOMOL..."
+          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
