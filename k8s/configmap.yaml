@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registration-config
+  namespace: petshop-apps
+data:
+  QUARKUS_HTTP_PORT: "8080"
+  POSTGRES_HOST: "postgres-service.petshop-infra.svc.cluster.local"
+  DB_PORT: "5432"
+  DB_NAME: "petshop_db"
+  DB_SCHEMA: "public"
+  RABBITMQ_HOST: "rabbitmq-service.petshop-infra.svc.cluster.local"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_VIRTUAL_HOST: "/"
+  RABBITMQ_SSL: "false"
